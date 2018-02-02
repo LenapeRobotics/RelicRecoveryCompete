@@ -34,6 +34,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -273,12 +274,12 @@ public class Teleop_Omni_cornerWheels extends OpMode
     */
 
 
-                liftMotor.setPower(gamepad2.left_stick_y);
+                liftMotor.setPower(gamepad2.right_stick_y);
 
     //hi jenna happy birthday!!!!11!!1!!!
 
     //this  is for the mechanism that turns the ball arms 180 degrees
-            if (gamepad2.right_bumper){
+           /* if (gamepad2.right_bumper){
                 turnRight = true;
                 turnLeft = false;
 
@@ -299,7 +300,7 @@ public class Teleop_Omni_cornerWheels extends OpMode
                 left = false;
 
              }
-
+*/
                 if (gamepad1.x) {
 
                     //dowm
@@ -330,23 +331,29 @@ public class Teleop_Omni_cornerWheels extends OpMode
 
 
 
-            relicHand.setPosition(continuousStop);
-            while (gamepad2.dpad_left){
+            if (gamepad2.left_trigger > deadZone){
                 relicHand.setPosition(1);
-            }
-            while (gamepad2.dpad_right) {
+                telemetry.addData("relicHand","activated");
+                telemetry.update();
+            }else if(gamepad2.right_trigger > deadZone) {
                 relicHand.setPosition(0);
+                telemetry.addData("relicHand","activated");
+                telemetry.update();
+            } else {
+                relicHand.setPosition(0.5);
+
             }
 
 
             //wrist mechanism programming
-            relicWrist.setPosition(continuousStop);
 
-            while (gamepad2.left_trigger > deadZone){
-
-                relicWrist.setPosition(gamepad2.left_stick_y);
+            if (gamepad2.left_stick_x > .2){
+                relicWrist.setPosition(1);
+            } else if (gamepad2.left_stick_x < -.2){
+                relicWrist.setPosition(0);
+            } else{
+                relicWrist.setPosition(.5);
             }
-
 
     /*
      * Code to run ONCE after the driver hits STOP
